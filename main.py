@@ -56,6 +56,23 @@ def save_file():
             website_input.delete(0, END)
             password_input.delete(0, END)
 
+# ---------------------------- SEARCH PASSWORD ----------------------------- #
+def findpassword():
+    search_web = website_input.get()
+
+    try:
+        with open("data.json", "r") as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        messagebox.showerror(title="Error", message="No Data File Found")
+    else:
+        if search_web in data:
+            email = data[search_web]["username"]
+            password = data[search_web]["password"]
+            messagebox.showinfo(title="Password Found", message=f"Username: {email}\nPassword: {password}")
+        else:
+            messagebox.showerror(title="Error", message="No details for the website exists.")
+
 # ---------------------------- UI SETUP ------------------------------- #
 
 window = Tk()
@@ -77,7 +94,7 @@ password.grid(row=3, column=0, sticky=EW)
 
 # Entries
 website_input = Entry(width=35)
-website_input.grid(row=1, column=1, columnspan=2, sticky=EW)
+website_input.grid(row=1, column=1, sticky=EW)
 website_input.focus() # Automatically put cursor at this entry
 username_input = Entry(width=35)
 username_input.grid(row=2, column=1, columnspan=2, sticky=EW)
@@ -90,6 +107,8 @@ generate = Button(text="Generate Password", command=generate_password)
 generate.grid(row=3, column=2, sticky=EW)
 add = Button(text="Add", width=36, command=save_file)
 add.grid(row=4, column=1, columnspan=2, sticky=EW)
+search = Button(text="Search", command=findpassword)
+search.grid(row=1, column=2, sticky=EW)
 
 
 window.mainloop()
